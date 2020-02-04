@@ -70,6 +70,8 @@ class AdyenGenericConfigProvider implements ConfigProviderInterface
         }
 
 		$config['payment']['checkoutCardComponentSource'] = $this->_adyenHelper->getCheckoutCardComponentJs($this->storeManager->getStore()->getId());
+        $config['payment']['checkoutAdyenTestEsm'] = "https://unpkg.com/generic-component@latest/dist/adyen-checkout/adyen-checkout.esm.js";
+        $config['payment']['checkoutAdyenTest'] = "https://unpkg.com/generic-component@latest/dist/adyen-checkout/adyen-checkout.js";
 
         return $config;
     }

@@ -434,6 +434,7 @@ define(
                 return window.checkoutConfig.payment.adyenCc.methodCode;
             },
             getOriginKey: function () {
+                console.log(window.checkoutConfig.payment.adyenCc.originKey);
                 return window.checkoutConfig.payment.adyenCc.originKey;
             },
             getCheckoutEnvironment: function () {

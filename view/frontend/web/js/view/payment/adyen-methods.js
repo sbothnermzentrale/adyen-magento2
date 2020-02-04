@@ -74,6 +74,18 @@ define(
                 checkoutCardComponentScriptTag.type = "text/javascript";
                 document.head.appendChild(checkoutCardComponentScriptTag);
 
+                var checkoutAdyenTestScriptTag = document.createElement('script');
+                checkoutAdyenTestScriptTag.id = "checkoutAdyenTestScriptTag";
+                checkoutAdyenTestScriptTag.src = self.getCheckoutAdyenTest();
+                checkoutAdyenTestScriptTag.setAttribute('nomodule', '')
+                document.head.appendChild(checkoutAdyenTestScriptTag);
+
+                var checkoutAdyenTestScriptTag = document.createElement('script');
+                checkoutAdyenTestScriptTag.id = "checkoutAdyenTestEsmScriptTag";
+                checkoutAdyenTestScriptTag.src = self.getCheckoutAdyenTestEsm();
+                checkoutAdyenTestScriptTag.type = "module";
+                document.head.appendChild(checkoutAdyenTestScriptTag);
+
                 if (this.isGooglePayEnabled()) {
                     var googlepayscript = document.createElement('script');
                     googlepayscript.src = "https://pay.google.com/gp/p/js/pay.js";
@@ -83,6 +95,12 @@ define(
             },
             getCheckoutCardComponentSource: function() {
                 return window.checkoutConfig.payment.checkoutCardComponentSource;
+            },
+            getCheckoutAdyenTest: function() {
+                return window.checkoutConfig.payment.checkoutAdyenTest;
+            },
+            getCheckoutAdyenTestEsm: function() {
+                return window.checkoutConfig.payment.checkoutAdyenTestEsm;
             },
             isGooglePayEnabled: function() {
                 return window.checkoutConfig.payment.adyenGooglePay.active;
