@@ -70,6 +70,8 @@ define(
                     locale: this.getLocale()
                 });
 
+
+
                 return this;
             },
             initObservable: function () {
@@ -105,6 +107,8 @@ define(
             renderSecureFields: function () {
                 let self = this;
 
+
+
                 if (!self.getOriginKey()) {
                     return;
                 }
@@ -124,7 +128,14 @@ define(
                     enableStoreDetails: self.getEnableStoreDetails(),
                     groupTypes: self.getAvailableCardTypeAltCodes(),
 
+
+
                     onChange: function (state, component) {
+                        const cardComponent = document.querySelector('adyen-payment-method-card')
+                        cardComponent.addEventListener('adyenChange', onChange)
+                        cardComponent.addEventListener('adyenSubmit', onSubmit)
+
+
                         if (!!state.isValid && !component.state.errors.encryptedSecurityCode) {
                             self.storeCc = !!state.data.storePaymentMethod;
                             self.creditCardNumber(state.data.paymentMethod.encryptedCardNumber);
@@ -180,6 +191,7 @@ define(
                         }
                     }
                 }).mount(cardNode);
+
             },
             /**
              * Rendering the 3DS2.0 components
@@ -434,7 +446,32 @@ define(
                 return window.checkoutConfig.payment.adyenCc.methodCode;
             },
             getOriginKey: function () {
+                var self = this;
+                console.log(self);
                 console.log(window.checkoutConfig.payment.adyenCc.originKey);
+                const cardComponent = document.querySelector('adyen-payment-method-card')
+                cardComponent.addEventListener('adyenChange', function (ev) {
+                    console.log(ev.detail)
+                    const state = ev.detail.state
+                    const component = ev.detail.component
+                    console.log(state)
+                    if (!!state.isValid) {
+                        self.storeCc = !!state.data.storePaymentMethod;
+                        self.creditCardNumber(state.data.paymentMethod.encryptedCardNumber);
+                        self.expiryMonth(state.data.paymentMethod.encryptedExpiryMonth);
+                        self.expiryYear(state.data.paymentMethod.encryptedExpiryYear);
+                        self.securityCode(state.data.paymentMethod.encryptedSecurityCode);
+                        self.creditCardOwner(state.data.paymentMethod.holderName);
+                        self.creditCardDetailsValid(true);
+                        self.placeOrderAllowed(true);
+                        console.log('test');
+                    } else {
+                        self.creditCardDetailsValid(false);
+                        self.placeOrderAllowed(false);
+                    }
+                })
+
+                console.log(cardComponent)
                 return window.checkoutConfig.payment.adyenCc.originKey;
             },
             getCheckoutEnvironment: function () {

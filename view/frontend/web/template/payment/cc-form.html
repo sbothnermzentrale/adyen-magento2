@@ -52,13 +52,14 @@
 
 
         <adyen-checkout
+            data-bind="attr: { 'origin-key': getOriginKey() }"
                 locale="pt_BR"
                 environment="test"
-                origin-key='pub.v2.8115205150723154.aHR0cHM6Ly9tYWdlbnRvLTIuMy4yLXJpay5zZWFtbGVzcy1jaGVja291dC5zdG9yZQ.y1xHs1JsXGWQ0tWw-3I8jEEJH4eAbIoVWBIURnTz2EM'
+            
                 payment-methods='{"groups":[{"name":"Credit Card","types":["amex","cup","diners","discover","elo","hiper","hipercard","jcb","laser","maestro","mc","visa"]}],"paymentMethods":[{"brands":["amex","cup","diners","discover","elo","hiper","hipercard","jcb","laser","maestro","mc","visa"],"details":[{"key":"number","type":"text"},{"key":"expiryMonth","type":"text"},{"key":"expiryYear","type":"text"},{"key":"cvc","type":"text"},{"key":"holderName","optional":true,"type":"text"}],"name":"Credit Card","type":"scheme"},{"name":"Boleto","supportsRecurring":true,"type":"boleto"},{"name":"Boleto Bancario","supportsRecurring":true,"type":"boletobancario"},{"details":[{"key":"number","type":"text"},{"key":"expiryMonth","type":"text"},{"key":"expiryYear","type":"text"},{"key":"cvc","type":"text"},{"key":"holderName","optional":true,"type":"text"},{"key":"telephoneNumber","optional":true,"type":"text"}],"name":"ExpressPay","supportsRecurring":true,"type":"cup"},{"name":"Direct Debit Brazil - Bradesco","supportsRecurring":true,"type":"directdebit_BR_bradesco"},{"name":"Finnish E-Banking","supportsRecurring":true,"type":"ebanking_FI"},{"details":[{"key":"bic","type":"text"}],"name":"GiroPay","supportsRecurring":true,"type":"giropay"},{"name":"Mercado Pago","supportsRecurring":true,"type":"mercadopago"},{"details":[{"items":[{"id":"molpay_krungsribank","name":"Krungsri Bank"},{"id":"molpay_kbank","name":"Kasikorn Bank"},{"id":"molpay_krungthaibank","name":"Krung Thai Bank"},{"id":"molpay_siamcommercialbank","name":"The Siam Commercial Bank"},{"id":"molpay_bangkokbank","name":"Bangkok Bank"}],"key":"issuer","type":"select"}],"name":"Thailand E-Banking","supportsRecurring":true,"type":"molpay_ebanking_TH"},{"details":[{"key":"paywithgoogle.token","type":"payWithGoogleToken"}],"name":"Google Pay","supportsRecurring":true,"type":"paywithgoogle"},{"name":"UnionPay","supportsRecurring":true,"type":"unionpay"}]}'
                 amount='{"value":1000, "currency": "EUR" }'
         >
-            <adyen-card></adyen-card>
+            <adyen-payment-method-card></adyen-payment-method-card>
         </adyen-checkout>
 
 
