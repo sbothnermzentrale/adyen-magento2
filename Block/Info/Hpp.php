@@ -38,14 +38,18 @@ class Hpp extends AbstractInfo
      */
     public function getBankTransferData()
     {
-        $result = [];
+
         if (!empty($this->getInfo()->getOrder()->getPayment()) &&
-            !empty($this->getInfo()->getOrder()->getPayment()->getAdditionalInformation('bankTransfer.owner'))
+            !empty($this->getInfo()->getOrder()->getPayment()->getAdditionalInformation('additionalData'))
         ) {
-            $result = $this->getInfo()->getOrder()->getPayment()->getAdditionalInformation();
+            $additionalData = $this->getInfo()->getOrder()->getPayment()->getAdditionalInformation('additionalData');
+
+            if (!empty($additionalData['bankTransfer.reference'])) {
+                return $additionalData;
+            }
         }
 
-        return $result;
+        return [];
     }
 
     /**
