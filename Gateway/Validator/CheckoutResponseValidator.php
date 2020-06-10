@@ -71,24 +71,22 @@ class CheckoutResponseValidator extends AbstractValidator
             switch ($response['resultCode']) {
                 case "ChallengeShopper":
                 case "IdentifyShopper":
-                    $payment->setAdditionalInformation('action', $response['action']);
-                    break;
                 case "Authorised":
                 case "Received":
-                    // For banktransfers store all bankTransfer details
-                    if (!empty($response['additionalData']['bankTransfer.owner'])) {
-                        foreach ($response['additionalData'] as $key => $value) {
-                            if (strpos($key, 'bankTransfer') === 0) {
-                                $payment->setAdditionalInformation($key, $value);
-                            }
-                        }
-                    } elseif (!empty($response['additionalData']['comprafacil.entity'])) {
-                        //Multibanco resultCode has changed after checkout v49 and comprafacil.entity is not received anymore
-                        foreach ($response['additionalData'] as $key => $value) {
-                            if (strpos($key, 'comprafacil') === 0) {
-                                $payment->setAdditionalInformation($key, $value);
-                            }
-                        }
+                case "PresentToShopper":
+                    // Store action for the payment to show it on the frontend as a component
+                    if (!empty($response['action'])) {
+                        $payment->setAdditionalInformation('action', $response['action']);
+                    }
+
+                    // Store additionalData for the payment to show it on the frontend
+                    if (!empty($response['additionalData'])) {
+                        $payment->setAdditionalInformation('additionalData', $response['additionalData']);
+                    }
+
+                    // Store PSP reference if available
+                    if (!empty($response['pspReference'])) {
+                        $payment->setAdditionalInformation('pspReference', $response['pspReference']);
                     }
 
                     // Save cc_type if available in the response
@@ -96,15 +94,6 @@ class CheckoutResponseValidator extends AbstractValidator
                         $ccType = $this->adyenHelper->getMagentoCreditCartType($response['additionalData']['paymentMethod']);
                         $payment->setAdditionalInformation('cc_type', $ccType);
                         $payment->setCcType($ccType);
-                    }
-                    $payment->setAdditionalInformation('pspReference', $response['pspReference']);
-                    break;
-                case "PresentToShopper":
-                    if (!empty($response['action'])) {
-                        $payment->setAdditionalInformation('action', $response['action']);
-                    }
-                    if (!empty($response['pspReference'])) {
-                        $payment->setAdditionalInformation('pspReference', $response['pspReference']);
                     }
                     break;
                 case "RedirectShopper":
