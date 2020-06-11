@@ -90,6 +90,7 @@ class Success extends \Magento\Framework\View\Element\Template
 
     /**
      * Detect if Boleto is used as payment method
+     *
      * @return bool
      */
     public function isBoletoPayment()
@@ -102,14 +103,15 @@ class Success extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return null|\string[]
+     * @return array|string[]
      */
     public function getBoletoData()
     {
         if ($this->isBoletoPayment()) {
-            return $this->getOrder()->getPayment()->getAdditionalInformation('action');
+            return $this->getActionData();
         }
-        return null;
+
+        return [];
     }
 
     /**
@@ -119,38 +121,42 @@ class Success extends \Magento\Framework\View\Element\Template
      */
     public function getBankTransferData()
     {
-        $result = [];
-        if (!empty($this->getOrder()->getPayment()) &&
-            !empty($this->getOrder()->getPayment()->getAdditionalInformation('bankTransfer.owner'))
-        ) {
-            $result = $this->getOrder()->getPayment()->getAdditionalInformation();
+        $additionalData = $this->getAdditionalData();
+
+        if (empty($additionalData['bankTransfer.owner'])) {
+            return [];
         }
 
-        return $result;
+        return $additionalData;
     }
 
     /**
-     * Get multibanco additional data
+     * Retreive additionalData for a payment
      *
      * @return array|string[]
      */
-    public function getMultibancoData()
+    public function getAdditionalData()
     {
-        $result = [];
         if (empty($this->getOrder()->getPayment())) {
-            return $result;
-        }
-        $action = $this->getOrder()->getPayment()->getAdditionalInformation('action');
-        if (!empty($action["paymentMethodType"]) &&
-            (strcmp($action["paymentMethodType"], 'multibanco') === 0)
-        ) {
-            $result = $action;
+            return [];
         }
 
-        return $result;
+        return $this->getOrder()->getPayment()->getAdditionalInformation('additionalData');
     }
 
+    /**
+     * Retreive action for a payment
+     *
+     * @return array|string[]
+     */
+    public function getActionData()
+    {
+        if (empty($this->getOrder()->getPayment())) {
+            return [];
+        }
 
+        return $this->getOrder()->getPayment()->getAdditionalInformation('action');
+    }
 
     /**
      * @return \Magento\Sales\Model\Order
